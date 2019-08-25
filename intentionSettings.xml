@@ -1,0 +1,5 @@
+<application>
+  <component name="IntentionManagerSettings">
+    <ignoreAction name="JavaScript/ECMAScript 6/Create derived class / Implement interface" />
+  </component>
+</application>
