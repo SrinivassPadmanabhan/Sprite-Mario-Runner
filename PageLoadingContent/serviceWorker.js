@@ -1,15 +1,13 @@
 const filesToCache = [
-    "/",
     "/Theme-Ringtone.mp3",
     "/sprite.html",
     "/spriteMario.css",
     "/spriteMario.js",
     "/spriteMarioV1.png",
-    "/IndexedDBUtil.js",
-    "/serviceWorker.js"
+    "/IndexedDBUtil.js"
 ],
     version = 1,
-    cacheName = "cacheV"+JSON.stringify(Date.now()),
+    cacheName = "cacheV"+1,
     cacheEvent = {
         "install" : "install",
         "fetch" : "fetch",
@@ -30,7 +28,9 @@ function cacheInstallEventHandler(event){
                     cache.add(elem);
                 });
             }
-        )
+        ).then(_ => {
+            self.skipWaiting();
+        })
     );
 };
 function cacheFetchEventHandler(event){
@@ -44,11 +44,22 @@ function cacheFetchEventHandler(event){
                     return response;
                 }
                 trace('Network request for '+ event.request.url);
-                console.log('Network request for ', event.request.url);
+                //console.log('Network request for ', event.request.url);
                 return fetch(event.request)
-                .then(function(data){
-
-                });
+                // return fetch(event.request).then(
+                //      res => {
+                //          const resclone = res.clone();
+                //          caches.open(cacheName).then( cache => {
+                //              cache.put( event.request, resclone);
+                //          });
+                //          return res;
+                //      }).catch(function(err) {
+                //          caches.match(event.request).then(
+                //              res=>{
+                //                  return res;
+                //              }
+                //          )
+                //      });
             }).catch(function(err){
                 console.log("some error", err);
             })
@@ -56,13 +67,15 @@ function cacheFetchEventHandler(event){
 };
 function activationHandler( event ){
     console.log('Activating new service worker...');  
-    const cacheWhitelist = [cacheName];  
+    //const cacheWhitelist = [cacheName];  
     event.waitUntil(
       caches.keys().then(cacheNames => {
         return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName);
+          cacheNames.map(cache_nm => {
+            if (cache_nm !== cacheName) {
+                
+              return caches.delete(cache_nm);
+              
             }
           })
         );

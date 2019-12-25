@@ -380,29 +380,35 @@ var button = {
 			console.log(tableInnerContentStr);
 			tableElem.innerHTML = tableInnerContentStr;
 		};
-		function getHighScore(){
-			return new Promise (function (resolve, reject){
+		 function getHighScore(){
+			return new Promise (async function (resolve, reject){
 				try {
-					var xmlHttp = new XMLHttpRequest();
-					url = "./getHighScore";
-					xmlHttp.onreadystatechange = function() { 
-						console.log("readyState value ===> ", xmlHttp.readyState);
-						console.log("status Value ===> ", xmlHttp.status);
-						if(xmlHttp.readyState == 4 ){
-							if ( xmlHttp.status == 200){
-								// leaderBoardArr = JSON.parse(xmlHttp.responseText);
-								// fillLeaderBoard();
-							//	localStorage.setItem("isOffline", "false");
-								resolve(JSON.parse(xmlHttp.responseText));
-							} else {
-								setTimeout(getHighScore, 5000);
-								reject(xmlHttp.status);
-							}
-						}
+					var request = new Request("./getHighScore");
+					var response = await fetch(request);
+					response.json().then(function(data){
+						resolve(data);
+					})
+					
+					// var xmlHttp = new XMLHttpRequest();
+					// url = "./getHighScore";
+					// xmlHttp.onreadystatechange = function() { 
+					// 	console.log("readyState value ===> ", xmlHttp.readyState);
+					// 	console.log("status Value ===> ", xmlHttp.status);
+					// 	if(xmlHttp.readyState == 4 ){
+					// 		if ( xmlHttp.status == 200){
+					// 			// leaderBoardArr = JSON.parse(xmlHttp.responseText);
+					// 			// fillLeaderBoard();
+					// 		//	localStorage.setItem("isOffline", "false");
+					// 			resolve(JSON.parse(xmlHttp.responseText));
+					// 		} else {
+					// 			setTimeout(getHighScore, 5000);
+					// 			reject(xmlHttp.status);
+					// 		}
+					// 	}
 											
-					}
-					xmlHttp.open("GET", url, true); // true for asynchronous 
-					xmlHttp.send(null);
+					// }
+					// xmlHttp.open("GET", url, true); // true for asynchronous 
+					// xmlHttp.send(null);
 				} catch(e){				
 				//	isOffline = true;
 				//	localStorage.setItem("isOffline", "true");
