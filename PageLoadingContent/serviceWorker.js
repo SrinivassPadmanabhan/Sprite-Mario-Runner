@@ -7,7 +7,7 @@ const filesToCache = [
     "/IndexedDBUtil.js"
 ],
     version = 1,
-    cacheName = "cacheV"+1,
+    cacheName = "cacheV"+Date.now(),
     cacheEvent = {
         "install" : "install",
         "fetch" : "fetch",
